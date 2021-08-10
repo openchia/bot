@@ -23,6 +23,7 @@ class Faucet(PluginBase):
         super().__init__(*args, **kwargs)
         self.wallet_rpc_client = None
         self.addresses = defaultdict(int)
+        self.authors = defaultdict(int)
         self.ttl = cachetools.TTLCache(
             self.config['faucet'].get('transactions_per_time_target', 100) * 2,
             self.config['faucet'].get('time_target', 86400),
@@ -53,19 +54,27 @@ class Faucet(PluginBase):
         channel_id = self.config['faucet'].get('channel_id')
         if channel_id is not None and message.channel.id != channel_id:
             return
-        if message.content.startswith('.faucet '):
-            try:
-                addr = message.content.split('.faucet ', 1)[-1].strip()
-                if self.addresses[addr] > time.time() - self.config['faucet'].get('addresses_time_targe', 86400):
-                    await message.channel.send('Mojo has already been sent to that address.')
-                elif len(self.ttl) >= self.config['faucet'].get('transactions_per_time_target', 100):
-                    await message.channel.send('Exceeded the amount of mojos in the last 24 hours.')
-                else:
-                    transaction = await self.wallet_rpc_client.send_transaction(
-                        self.config['faucet']['wallet_id'], 1, addr,
-                    )
-                    await message.channel.send(f'Faucet sent! Transaction {transaction.name}')
-                    self.addresses[addr] = time.time()
-                    self.ttl[time.time()] = addr
-            except ValueError as e:
-                await message.channel.send(f'Failed to send: {e.args[0]["error"]}')
+        if not message.content.startswith('.faucet '):
+            return
+        try:
+            addr = message.content.split('.faucet ', 1)[-1].strip()
+            if self.addresses[addr] > time.time() - self.config['faucet'].get(
+                'addresses_time_target', 86400
+            ):
+                await message.channel.send('Mojo has already been sent to that address.')
+            elif self.authors[message.author.id] > time.time() - self.config['faucet'].get(
+                'authors_time_target', 86400
+            ):
+                await message.channel.send('Exceeded the amount of mojos in the last 24 hours.')
+            elif len(self.ttl) >= self.config['faucet'].get('transactions_per_time_target', 100):
+                await message.channel.send('Exceeded the amount of mojos in the last 24 hours.')
+            else:
+                transaction = await self.wallet_rpc_client.send_transaction(
+                    self.config['faucet']['wallet_id'], 1, addr,
+                )
+                await message.channel.send(f'Faucet sent! Transaction {transaction.name}')
+                self.addresses[addr] = time.time()
+                self.authors[message.author.id] = time.time()
+                self.ttl[time.time()] = addr
+        except ValueError as e:
+            await message.channel.send(f'Failed to send: {e.args[0]["error"]}')
