@@ -72,7 +72,7 @@ class Faucet(PluginBase):
                 transaction = await self.wallet_rpc_client.send_transaction(
                     self.config['faucet']['wallet_id'], 1, addr,
                 )
-                await message.channel.send(f'Faucet sent! Transaction {transaction.name}')
+                await message.channel.send(f'Mojo sent! Transaction {transaction.name}')
                 self.addresses[addr] = time.time()
                 self.authors[message.author.id] = time.time()
                 self.ttl[time.time()] = addr
