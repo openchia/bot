@@ -69,10 +69,11 @@ class Faucet(PluginBase):
             elif len(self.ttl) >= self.config['faucet'].get('transactions_per_time_target', 100):
                 await message.channel.send('Exceeded the amount of mojos in the last 24 hours.')
             else:
+                mojos = self.config['faucet'].get('mojos', 1)
                 transaction = await self.wallet_rpc_client.send_transaction(
-                    self.config['faucet']['wallet_id'], 1, addr,
+                    self.config['faucet']['wallet_id'], mojos, addr,
                 )
-                await message.channel.send(f'Mojo sent! Transaction {transaction.name}')
+                await message.channel.send(f'{mojos} Mojos sent! Transaction {transaction.name}')
                 self.addresses[addr] = time.time()
                 self.authors[message.author.id] = time.time()
                 self.ttl[time.time()] = addr
