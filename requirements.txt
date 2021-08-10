@@ -1,7 +1,7 @@
-aiohttp==3.7.4.post0
+git+git://github.com/Chia-Network/chia-blockchain.git@1.2.3#egg=chia-blockchain
+aiohttp==3.7.4
 async-timeout==3.0.1
 attrs==21.2.0
-chardet==4.0.0
 colorlog==5.0.1
 discord.py==1.7.3
 humanize==3.10.0
@@ -10,3 +10,4 @@ multidict==5.1.0
 PyYAML==5.4.1
 typing-extensions==3.10.0.0
 yarl==1.6.3
+cachetools=4.2.2

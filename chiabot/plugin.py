@@ -37,7 +37,10 @@ class Plugins(object):
             for j in dir(mod):
 
                 attr = getattr(mod, j)
-                if not (issubclass(attr, PluginBase) and attr != PluginBase):
+                try:
+                    if not (issubclass(attr, PluginBase) and attr != PluginBase):
+                        continue
+                except TypeError:
                     continue
 
                 if attr.NAME is NotImplemented:
@@ -60,3 +63,6 @@ class Plugins(object):
 
     async def on_ready(self, client):
         await self.exec_plugin(client, 'on_ready')
+
+    async def on_message(self, client, message):
+        await self.exec_plugin(client, 'on_message', [message])

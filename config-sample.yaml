@@ -1,3 +1,10 @@
 token: XXXX
 openchia_stats:
   interval: 30
+faucet:
+  wallet_fingerprint: 2756312777
+  wallet_id: 1
+  time_target: 86400
+  transactions_per_time_target: 100
+  addresses_time_target: 86400
+  channel_id: 874461341602172949
