@@ -35,7 +35,7 @@ class OpenChiaStats(PluginBase):
 
             i = i % 5
             if i == 0:
-                await me.edit(nick=f'Farmers: {stats["farmers"]}')
+                await me.edit(nick=f'Farmers: {stats["farmers_active"]}')
             elif i == 1:
                 await me.edit(nick=f'Pool size: {humanize.naturalsize(stats["pool_space"], True)}')
             elif i == 2:
