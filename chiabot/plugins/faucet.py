@@ -7,7 +7,7 @@ import time
 from chia.rpc.wallet_rpc_client import WalletRpcClient
 from chia.util.config import load_config
 from chia.util.default_root import DEFAULT_ROOT_PATH
-from chia.util.ints import uint16
+from chia.util.ints import uint16, uint64
 from chiabot.plugin import PluginBase
 from collections import defaultdict
 
@@ -90,7 +90,7 @@ class Faucet(PluginBase):
             else:
                 mojos = self.config['faucet'].get('mojos', 1)
                 transaction = await self.wallet_rpc_client.send_transaction(
-                    self.config['faucet']['wallet_id'], mojos, addr,
+                    self.config['faucet']['wallet_id'], mojos, addr, fee=uint64(1),
                 )
                 await message.channel.send(f'{mojos} Mojos sent! Transaction {transaction.name}')
                 self.addresses[addr] = time.time()
