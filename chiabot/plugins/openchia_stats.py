@@ -33,7 +33,7 @@ class OpenChiaStats(PluginBase):
             guild = await client.fetch_guild(865233670938689537)
             me = await guild.fetch_member(client.user.id)
 
-            i = i % 5
+            i = i % 6
             if i == 0:
                 await me.edit(nick=f'Farmers: {stats["farmers_active"]}')
             elif i == 1:
@@ -44,3 +44,5 @@ class OpenChiaStats(PluginBase):
                 await me.edit(nick=f'Height: {stats["blockchain_height"]}')
             elif i == 4:
                 await me.edit(nick=f'Price: ${stats["xch_current_price"]["usd"]}')
+            elif i == 5:
+                await me.edit(nick=f'Dust Storm: {stats["blockchain_duststorm"]}')
