@@ -32,28 +32,33 @@ class Faucet(PluginBase):
         wallet_ssl_dir = self.config['faucet'].get('wallet_ssl_dir')
         wallet_hostname = self.config['faucet'].get('wallet_hostname') or 'localhost'
         wallet_port = self.config['faucet'].get('wallet_port') or 9256
-        if wallet_ssl_dir:
-            self.wallet_rpc_client = await WalletRpcClient.create(
-                wallet_hostname,
-                uint16(wallet_port),
-                pathlib.Path(wallet_ssl_dir),
-                {
-                    'private_ssl_ca': {
-                        'crt': 'private_ca.crt',
-                        'key': 'private_ca.key',
+        logger.info('Logging in into wallet')
+        try:
+            if wallet_ssl_dir:
+                self.wallet_rpc_client = await WalletRpcClient.create(
+                    wallet_hostname,
+                    uint16(wallet_port),
+                    pathlib.Path(wallet_ssl_dir),
+                    {
+                        'private_ssl_ca': {
+                            'crt': 'private_ca.crt',
+                            'key': 'private_ca.key',
+                        },
+                        'daemon_ssl': {
+                            'private_crt': 'private_daemon.crt',
+                            'private_key': 'private_daemon.key',
+                        },
                     },
-                    'daemon_ssl': {
-                        'private_crt': 'private_daemon.crt',
-                        'private_key': 'private_daemon.key',
-                    },
-                },
-            )
+                )
+            else:
+                config = load_config(DEFAULT_ROOT_PATH, "config.yaml")
+                self.wallet_rpc_client = await WalletRpcClient.create(
+                    wallet_hostname, uint16(wallet_port), DEFAULT_ROOT_PATH, config
+                )
+        except Exception:
+            logger.error('Failed to log in to wallet', exc_info=True)
         else:
-            config = load_config(DEFAULT_ROOT_PATH, "config.yaml")
-            self.wallet_rpc_client = await WalletRpcClient.create(
-                wallet_hostname, uint16(wallet_port), DEFAULT_ROOT_PATH, config
-            )
-        asyncio.ensure_future(self._log_in_loop())
+            asyncio.ensure_future(self._log_in_loop())
 
     async def _log_in_loop(self):
         while True:
