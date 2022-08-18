@@ -1,4 +1,4 @@
-git+git://github.com/Chia-Network/chia-blockchain.git@1.5.0#egg=chia-blockchain
+git+https://github.com/Chia-Network/chia-blockchain.git@1.5.0#egg=chia-blockchain
 aiohttp==3.7.4
 async-timeout==3.0.1
 attrs==21.2.0
