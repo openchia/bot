@@ -51,6 +51,7 @@ def main():
 
     intents = discord.Intents.default()
     intents.members = True
+    intents.message_content = True
     client = ChiaBotClient(plugins=plugins, intents=intents)
 
     client.run(config['token'])
