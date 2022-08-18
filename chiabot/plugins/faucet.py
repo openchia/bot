@@ -53,12 +53,12 @@ class Faucet(PluginBase):
             self.wallet_rpc_client = await WalletRpcClient.create(
                 wallet_hostname, uint16(wallet_port), DEFAULT_ROOT_PATH, config
             )
-        asyncio.ensure_future(self._log_in_and_skip_loop())
+        asyncio.ensure_future(self._log_in_loop())
 
-    async def _log_in_and_skip_loop(self):
+    async def _log_in_loop(self):
         while True:
             try:
-                res = await self.wallet_rpc_client.log_in_and_skip(
+                res = await self.wallet_rpc_client.log_in(
                     fingerprint=self.config['faucet']['wallet_fingerprint'],
                 )
                 if not res["success"]:
