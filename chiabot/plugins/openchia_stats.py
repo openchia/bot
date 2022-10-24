@@ -45,4 +45,4 @@ class OpenChiaStats(PluginBase):
             elif i == 4:
                 await me.edit(nick=f'Price: ${stats["xch_current_price"]["usd"]}')
             elif i == 5:
-                await me.edit(nick=f'Dust Storm: {stats["blockchain_duststorm"]}')
+                await me.edit(nick=f'Dust Storm: {"yes" if stats["blockchain_duststorm"] else "no"}')
