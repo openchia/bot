@@ -1,5 +1,5 @@
-git+https://github.com/Chia-Network/chia-blockchain.git@1.5.0#egg=chia-blockchain
-aiohttp==3.8.1
+git+https://github.com/Chia-Network/chia-blockchain.git@2.1.3#egg=chia-blockchain
+aiohttp==3.9.1
 attrs==21.2.0
 colorlog==6.6.0
 discord.py==2.0.0
